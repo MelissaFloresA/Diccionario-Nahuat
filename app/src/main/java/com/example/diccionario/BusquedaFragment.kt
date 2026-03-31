@@ -5,55 +5,58 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.cardview.widget.CardView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [BusquedaFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class BusquedaFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_busqueda, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BusquedaFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BusquedaFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Configurar el clic en la card de resultado
+        val cardResultado = view.findViewById<CardView>(R.id.card_resultado)
+
+        cardResultado.setOnClickListener {
+            // Obtener los datos de la card
+            val palabra = view.findViewById<TextView>(R.id.texto_palabra).text.toString()
+            val significado = view.findViewById<TextView>(R.id.texto_significado).text.toString()
+
+            // Crear el fragment de detalle con los datos
+            val detalleFragment = DetallePalabraFragment()
+            val bundle = Bundle().apply {
+                putString("palabra_nahuat", palabra)
+                putString("palabra_significado", significado)
+                // Opcional: también puedes pasar la categoría, imagen, etc.
+                putString("categoria", "Alimentos")
             }
+            detalleFragment.arguments = bundle
+
+            // Navegar al fragment de detalle
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, detalleFragment)
+                .addToBackStack(null) // Permite volver atrás con el botón de retroceso
+                .commit()
+        }
+
+        // Configurar el botón de audio (opcional)
+        val botonAudio = view.findViewById<View>(R.id.boton_audio)
+        botonAudio.setOnClickListener {
+            // Aquí iría la lógica para reproducir audio
+            // Por ahora solo mostramos un mensaje o puedes dejarlo vacío
+        }
+
+        // Configurar el botón de retroceder del header
+        val botonRetroceder = view.findViewById<View>(R.id.boton_retroceder)
+        botonRetroceder.setOnClickListener {
+            // Volver al fragment anterior
+            parentFragmentManager.popBackStack()
+        }
     }
 }

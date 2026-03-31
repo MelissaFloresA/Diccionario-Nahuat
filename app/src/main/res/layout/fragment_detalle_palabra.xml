@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_2"
+    android:scrollbars="none"
+    tools:context=".DetallePalabraFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Imagen principal -->
+        <ImageView
+            android:id="@+id/imagen_principal"
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Imagen de la palabra"
+            android:background="@color/text_secundario"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Botón de retroceso flotante sobre la imagen -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/boton_retroceder"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@android:color/white"
+            android:src="?android:attr/homeAsUpIndicator"
+            android:contentDescription="Retroceder"
+            android:elevation="8dp"
+            app:cornerRadius="20dp"
+            app:icon="?android:attr/homeAsUpIndicator"
+            app:iconGravity="textStart"
+            app:iconSize="20dp"
+            app:iconTint="@color/main_text"
+            app:strokeColor="@color/text_secundario"
+            app:strokeWidth="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--contenido -->
+        <LinearLayout
+            android:id="@+id/contenido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imagen_principal">
+
+            <!-- Categoría centrada -->
+            <TextView
+                android:id="@+id/texto_categoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@android:color/white"
+                android:fontFamily="@font/montserrat_bold"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="6dp"
+                android:text="Gente"
+                android:textColor="@color/main_text"
+                android:textSize="12sp" />
+
+            <!-- Palabra en Náhuat -->
+            <TextView
+                android:id="@+id/texto_palabra_nahuat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:text="Ichpikatl"
+                android:textColor="@color/main_text"
+                android:textSize="48sp"
+                android:layout_marginBottom="-8dp" />
+
+            <!-- ESPañol -->
+            <TextView
+                android:id="@+id/texto_significado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
+                android:gravity="center"
+                android:text="Niña"
+                android:textColor="@color/text_secundario"
+                android:textSize="30sp"
+                android:layout_marginTop="0dp" />
+
+            <!-- Botones de acción -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <!-- Botón de audio -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/boton_audio"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:backgroundTint="@color/boton"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    android:src="@android:drawable/ic_media_play"
+                    android:contentDescription="Reproducir audio"
+                    app:cornerRadius="36dp"
+                    app:icon="@android:drawable/ic_media_play"
+                    app:iconGravity="textStart"
+                    app:iconSize="36dp"
+                    app:iconTint="@color/white" />
+
+                <!-- Botón de favorito -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/boton_favorito"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="24dp"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    android:contentDescription="Agregar a favoritos"
+                    app:cornerRadius="24dp"
+                    app:icon="@drawable/ic_favorite_border"
+                    app:iconGravity="textStart"
+                    app:iconSize="24dp"
+                    app:iconTint="#D1D5DB"
+                    app:strokeWidth="0dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Espacio al final -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/contenido" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
