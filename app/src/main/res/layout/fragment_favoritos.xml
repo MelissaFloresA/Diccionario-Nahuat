@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     android:background="#DFF2FF"
     android:scrollbars="none"
-    tools:context=".FavoritosFragment">
+    tools:context=".ui.FavoritosFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Header con botón de retroceder y título -->
+        <!-- Header -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/header_favoritos"
             android:layout_width="match_parent"
@@ -68,16 +68,9 @@
 
             </LinearLayout>
 
-            <View
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Línea divisoria debajo del header -->
+        <!-- Línea divisoria -->
         <View
             android:id="@+id/linea_divisoria"
             android:layout_width="match_parent"
@@ -88,111 +81,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/header_favoritos" />
 
-        <!-- Grid de resultados -->
-        <androidx.gridlayout.widget.GridLayout
-            android:id="@+id/grid_favoritos"
+        <!-- Mensaje cuando no hay favoritos -->
+        <TextView
+            android:id="@+id/texto_vacio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text=""
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:textColor="@color/text_secundario"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linea_divisoria" />
+
+        <!-- RecyclerView para favoritos -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_favoritos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            app:columnCount="1"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linea_divisoria">
-
-            <!-- Card de ejemplo -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_favorito"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:cardPreventCornerOverlap="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:id="@+id/texto_palabra"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat_bold"
-                            android:text="Tlaolli"
-                            android:textColor="@color/main_text"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/texto_significado"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="@font/montserrat_regular"
-                            android:text="Maíz"
-                            android:textColor="@color/text_secundario"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/boton_audio"
-                            style="@style/Widget.Material3.Button.IconButton"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:backgroundTint="@color/boton"
-                            android:insetLeft="0dp"
-                            android:insetTop="0dp"
-                            android:insetRight="0dp"
-                            android:insetBottom="0dp"
-                            android:src="@android:drawable/ic_media_play"
-                            android:contentDescription="Reproducir audio"
-                            app:icon="@android:drawable/ic_media_play"
-                            app:iconGravity="textStart"
-                            app:iconSize="20dp"
-                            app:iconTint="@color/white" />
-
-                        <ImageButton
-                            android:id="@+id/boton_favorito"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@android:color/transparent"
-                            android:src="@drawable/ic_favorite_filled"
-                            android:contentDescription="Quitar de favoritos"
-                            app:tint="#EF4444" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-        </androidx.gridlayout.widget.GridLayout>
-
-        <!-- Espacio al final -->
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/grid_favoritos" />
+            app:layout_constraintTop_toBottomOf="@+id/linea_divisoria" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

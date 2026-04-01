@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     android:background="@color/background_2"
     android:scrollbars="none"
-    tools:context=".BusquedaFragment">
+    tools:context=".ui.BusquedaFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Header con botón de retroceder y título -->
+        <!-- Header -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/header_busqueda"
             android:layout_width="match_parent"
@@ -50,16 +50,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Línea divisoria debajo del header -->
+        <!-- Línea divisoria -->
         <View
             android:id="@+id/linea_divisoria"
             android:layout_width="match_parent"
@@ -70,7 +63,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/header_busqueda" />
 
-        <!-- SearchView con color de fondo F0F9FF -->
+        <!-- SearchView -->
         <androidx.cardview.widget.CardView
             android:id="@+id/card_search"
             android:layout_width="match_parent"
@@ -89,99 +82,52 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:iconifiedByDefault="false"
-                android:queryHint="Buscar palabra..."
                 app:iconifiedByDefault="false"
-                app:queryHint="Buscar palabra..." />
+                android:queryHint="Buscar palabra..." />
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Grid de resultados -->
-        <androidx.gridlayout.widget.GridLayout
-            android:id="@+id/grid_resultados"
+        <!-- TextView para mostrar información de resultados -->
+        <TextView
+            android:id="@+id/texto_resultados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:text=""
+            android:textColor="@color/text_secundario"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_search" />
+
+        <!-- Mensaje cuando no hay resultados -->
+        <TextView
+            android:id="@+id/texto_vacio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text=""
+            android:textSize="16sp"
+            android:textColor="@color/text_secundario"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/texto_resultados" />
+
+        <!-- RecyclerView de resultados -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_resultados"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            app:columnCount="1"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_search">
-
-            <!-- Card de ejemplo -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_resultado"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:cardPreventCornerOverlap="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:id="@+id/texto_palabra"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat_bold"
-                            android:text="Tlaolli"
-                            android:textColor="@color/main_text"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/texto_significado"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="@font/montserrat_regular"
-                            android:text="Maíz"
-                            android:textColor="@color/text_secundario"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/boton_audio"
-                        style="@style/Widget.Material3.Button.IconButton"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:backgroundTint="@color/boton"
-                        android:insetLeft="0dp"
-                        android:insetTop="0dp"
-                        android:insetRight="0dp"
-                        android:insetBottom="0dp"
-                        android:src="@android:drawable/ic_media_play"
-                        android:contentDescription="Reproducir audio"
-                        app:icon="@android:drawable/ic_media_play"
-                        app:iconGravity="textStart"
-                        app:iconSize="24dp"
-                        app:iconTint="@color/white" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-        </androidx.gridlayout.widget.GridLayout>
-
-        <!-- Espacio al final -->
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/grid_resultados" />
+            app:layout_constraintTop_toBottomOf="@+id/texto_resultados" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

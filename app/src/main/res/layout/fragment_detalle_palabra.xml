@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_2"
     android:scrollbars="none"
-    tools:context=".DetallePalabraFragment">
+    tools:context=".ui.DetallePalabraFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Botón de retroceso flotante sobre la imagen -->
+        <!-- Botón de retroceso flotante -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/boton_retroceder"
             style="@style/Widget.Material3.Button.IconButton"
@@ -46,7 +46,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!--contenido -->
+        <!-- Contenido -->
         <LinearLayout
             android:id="@+id/contenido"
             android:layout_width="match_parent"
@@ -59,7 +59,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imagen_principal">
 
-            <!-- Categoría centrada -->
+            <!-- Categoría -->
             <TextView
                 android:id="@+id/texto_categoria"
                 android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="6dp"
-                android:text="Gente"
+                android:text="Categoría"
                 android:textColor="@color/main_text"
                 android:textSize="12sp" />
 
@@ -80,19 +80,19 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
                 android:gravity="center"
-                android:text="Ichpikatl"
+                android:text="Palabra"
                 android:textColor="@color/main_text"
-                android:textSize="48sp"
+                android:textSize="40sp"
                 android:layout_marginBottom="-8dp" />
 
-            <!-- ESPañol -->
+            <!-- Español -->
             <TextView
                 android:id="@+id/texto_significado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
                 android:gravity="center"
-                android:text="Niña"
+                android:text="Significado"
                 android:textColor="@color/text_secundario"
                 android:textSize="30sp"
                 android:layout_marginTop="0dp" />
