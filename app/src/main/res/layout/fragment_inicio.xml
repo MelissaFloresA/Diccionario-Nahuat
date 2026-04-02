@@ -7,7 +7,7 @@
     android:background="@color/background_1"
     android:paddingBottom="0dp"
     android:scrollbars="none"
-    tools:context=".InicioFragment">
+    tools:context=".ui.InicioFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Palabra del día"
                         android:textAllCaps="true"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text_card_dia"
                         android:textSize="12sp" />
 
                     <TextView
@@ -101,7 +101,7 @@
                         android:fontFamily="@font/montserrat_regular"
                         android:text="Mujer"
                         android:textColor="@color/white"
-                        android:textSize="16sp" />
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -195,7 +195,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/montserrat_regular"
                         android:gravity="center_horizontal"
-                        android:text="24 palabras"
+                        android:text=""
                         android:textColor="@color/text_secundario"
                         android:textSize="12sp" />
 
@@ -247,7 +247,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/montserrat_regular"
                         android:gravity="center_horizontal"
-                        android:text="18 palabras"
+                        android:text=""
                         android:textColor="@color/text_secundario"
                         android:textSize="12sp" />
 
@@ -299,7 +299,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/montserrat_regular"
                         android:gravity="center_horizontal"
-                        android:text="32 palabras"
+                        android:text=""
                         android:textColor="@color/text_secundario"
                         android:textSize="12sp" />
 
@@ -351,7 +351,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/montserrat_regular"
                         android:gravity="center_horizontal"
-                        android:text="15 palabras"
+                        android:text=""
                         android:textColor="@color/text_secundario"
                         android:textSize="12sp" />
 
@@ -403,7 +403,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/montserrat_regular"
                         android:gravity="center_horizontal"
-                        android:text="45 palabras"
+                        android:text=""
                         android:textColor="@color/text_secundario"
                         android:textSize="12sp" />
 
@@ -455,7 +455,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/montserrat_regular"
                         android:gravity="center_horizontal"
-                        android:text="50 palabras"
+                        android:text=""
                         android:textColor="@color/text_secundario"
                         android:textSize="12sp" />
 
