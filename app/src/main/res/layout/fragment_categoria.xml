@@ -42,7 +42,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Card de Progreso (Opcional) -->
+    <!-- Card de Progreso -->
     <androidx.cardview.widget.CardView
         android:id="@+id/card_progreso"
         android:layout_width="0dp"
@@ -50,20 +50,55 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         app:cardCornerRadius="16dp"
-        app:cardBackgroundColor="@color/white"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="#F0F9FF"
         app:layout_constraintTop_toBottomOf="@id/header_categoria"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/texto_progreso"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:padding="16dp"
-            android:text="Progreso de aprendizaje"
-            android:textSize="14sp"
-            android:fontFamily="@font/montserrat_regular"
-            android:textColor="@color/text_secundario"/>
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/check_progreso"
+                app:tint="@color/boton" />
+
+            <!-- Textos verticales-->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Progreso"
+                    android:textAllCaps="true"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textColor="@color/boton" />
+
+                <TextView
+                    android:id="@+id/texto_progreso"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Has aprendido 0 de 0 palabras"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/text_secundario" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

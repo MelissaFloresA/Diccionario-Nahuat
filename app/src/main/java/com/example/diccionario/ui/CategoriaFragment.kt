@@ -76,13 +76,13 @@ class CategoriaFragment : Fragment() {
     private fun obtenerPalabrasPorCategoria(): MutableList<Palabra> {
         val lista = mutableListOf<Palabra>()
 
-        // CAMBIADO: "diccionario" -> "palabra"
-        val cursor = db.rawQuery(
+        // consulta sql
+        val resultado = db.rawQuery(
             "SELECT * FROM palabra WHERE categoria = ? ORDER BY nahuat",
             arrayOf(categoria)
         )
 
-        cursor.use {
+        resultado.use {
             if (it.moveToFirst()) {
                 do {
                     val palabra = Palabra(

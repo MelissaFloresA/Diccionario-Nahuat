@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:iconifiedByDefault="false"
                 app:iconifiedByDefault="false"
-                android:queryHint="Buscar palabra..." />
+                app:queryHint="Buscar palabra..." />
 
         </androidx.cardview.widget.CardView>
 

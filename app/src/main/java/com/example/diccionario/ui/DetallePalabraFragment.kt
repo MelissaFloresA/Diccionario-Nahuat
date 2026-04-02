@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.diccionario.R
 import com.example.diccionario.db.DBHelper
-import com.example.diccionario.modelo.Palabra
 import com.google.android.material.button.MaterialButton
 
 class DetallePalabraFragment : Fragment() {
@@ -110,12 +109,12 @@ class DetallePalabraFragment : Fragment() {
     }
 
     private fun buscarEnDatabase(palabraNahuat: String) {
-        val cursor = db.rawQuery(
+        val resultado = db.rawQuery(
             "SELECT id, favorito, audio, imagen FROM palabra WHERE nahuat = ?",
             arrayOf(palabraNahuat)
         )
 
-        cursor.use {
+        resultado.use {
             if (it.moveToFirst()) {
                 palabraId = it.getInt(0)
                 isFavorite = it.getInt(1) == 1

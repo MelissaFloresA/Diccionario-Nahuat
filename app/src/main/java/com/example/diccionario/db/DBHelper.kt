@@ -16,16 +16,17 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     private val appContext = context.applicationContext
 
     override fun onCreate(db: SQLiteDatabase) {
-        // No hacer nada - la base de datos se copia desde assets
+        // No hace nada - la base de datos se copia desde assets
     }
 
+    //Se ejecuta cuando se cambia de version (para este proyecto solo manejaremos una)
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // Para futuras actualizaciones
         if (oldVersion < newVersion) {
-            // Aquí se puede implementar migración de datos
         }
     }
 
+    //Copia la base de datos prehecha hacia el sistema del teléfono
     @Throws(IOException::class)
     private fun copiarBaseDatos() {
         val dbPath = appContext.getDatabasePath(DATABASE_NAME)

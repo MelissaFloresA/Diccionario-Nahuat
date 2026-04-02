@@ -19,6 +19,10 @@ import com.example.diccionario.modelo.Palabra
 import com.example.diccionario.ui.DetallePalabraFragment
 import com.google.android.material.button.MaterialButton
 
+/**
+ * Adaptador para el RecyclerView que muestra la lista de palabras.
+ * Maneja la visualización, reproducción de audio, favoritos y navegación al detalle.
+ */
 class PalabraAdapter(
     private var lista: MutableList<Palabra>,
     private val context: Context,
@@ -29,7 +33,7 @@ class PalabraAdapter(
     private var mediaPlayer: MediaPlayer? = null
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val cardView: View = view // La card completa
+        val cardView: View = view // Referencia a toda la card para el click listener
         val img: ImageView = view.findViewById(R.id.imgPalabra)
         val txtNahuat: TextView = view.findViewById(R.id.txtNahuat)
         val txtEspanol: TextView = view.findViewById(R.id.txtEspanol)
@@ -37,59 +41,66 @@ class PalabraAdapter(
         val btnFav: ImageButton = view.findViewById(R.id.btnFavorito)
     }
 
+
+    //Crea nuevas vistas para el RecyclerView
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context)
             .inflate(R.layout.item_palabra, parent, false)
         return ViewHolder(view)
     }
 
+    //Contador de palabras por categoria
     override fun getItemCount(): Int = lista.size
 
+    //Vincula los datos de una palabra específica con su ViewHolder
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val palabra = lista[position]
 
-        // Configurar textos con primera letra mayúscula
+        // Configuración de textos con formato de mayuscula
         holder.txtNahuat.text = capitalizarPrimeraLetra(palabra.nahuat)
         holder.txtEspanol.text = capitalizarPrimeraLetra(palabra.espanol)
 
-        // Configurar imagen
+        // Carga la imagen desde recursos drawable
         cargarImagen(holder.img, palabra.imagen)
 
-        // Configurar botón de audio
+        // Configuramos el botón de audio para reproducir audio
         holder.btnAudio.setOnClickListener {
             reproducirAudio(palabra.audio)
         }
 
-        // Configurar visibilidad del botón favorito
+        // Control de visibilidad del botón favorito según el fragment
         if (mostrarFavorito) {
             holder.btnFav.visibility = View.VISIBLE
         } else {
             holder.btnFav.visibility = View.GONE
         }
 
-        // Configurar estado del favorito
+        // Actualiza el ícono del corazón (favorito o no)
         actualizarIconoFavorito(holder, palabra)
 
-        // Configurar click del favorito
+        //  listener para marcar/desmarcar favorito
         if (mostrarFavorito) {
             holder.btnFav.setOnClickListener {
                 toggleFavorito(palabra, holder, position)
             }
         }
 
-        // Configurar clic en toda la card para ir al detalle
+        // Navegación al detalle de la palabra al hacer clic en toda la card
         holder.cardView.setOnClickListener {
             navegarADetalle(palabra)
         }
     }
 
-    // ✅ Función para capitalizar la primera letra (versión corregida)
+  //Funcion de capitalización
     private fun capitalizarPrimeraLetra(texto: String): String {
         if (texto.isEmpty()) return texto
         return texto.substring(0, 1).uppercase() + texto.substring(1).lowercase()
     }
 
+    //Funcion para cargar png
     private fun cargarImagen(imageView: ImageView, nombreImagen: String) {
+        // Obtiene el ID del recurso drawable por su nombre
         val idImagen = context.resources.getIdentifier(
             nombreImagen,
             "drawable",
@@ -99,14 +110,18 @@ class PalabraAdapter(
         if (idImagen != 0) {
             imageView.setImageResource(idImagen)
         } else {
+            // Fallback: imagen por defecto si no se encuentra el recurso
             imageView.setImageResource(R.drawable.ic_launcher_background)
         }
     }
+
+    //Función para reproducir audio desde la carpeta raw
 
     private fun reproducirAudio(nombreAudio: String) {
         try {
             mediaPlayer?.release()
 
+            // Obtiene el ID del recurso raw por su nombre
             val idAudio = context.resources.getIdentifier(
                 nombreAudio,
                 "raw",
@@ -114,8 +129,10 @@ class PalabraAdapter(
             )
 
             if (idAudio != 0) {
+                // Crea y reproduce el audio
                 mediaPlayer = MediaPlayer.create(context, idAudio)
                 mediaPlayer?.start()
+                // Libera recursos al finalizar
                 mediaPlayer?.setOnCompletionListener {
                     it.release()
                     mediaPlayer = null
@@ -126,6 +143,7 @@ class PalabraAdapter(
         }
     }
 
+  //Actulización de vista de favoritos segun db
     private fun actualizarIconoFavorito(holder: ViewHolder, palabra: Palabra) {
         if (palabra.favorito == 1) {
             holder.btnFav.setImageResource(R.drawable.ic_favorite_filled)
@@ -136,14 +154,18 @@ class PalabraAdapter(
         }
     }
 
+    //Alterna el estado de favorito de una palabra
     private fun toggleFavorito(palabra: Palabra, holder: ViewHolder, position: Int) {
+        // Invierte el estado actual (1 -> 0, 0 -> 1)
         val nuevoValor = if (palabra.favorito == 1) 0 else 1
         palabra.favorito = nuevoValor
 
+        // Prepara los valores para actualizar en la base de datos
         val values = ContentValues().apply {
             put("favorito", nuevoValor)
         }
 
+        // Actualiza en la tabla 'palabra'
         db.update(
             "palabra",
             values,
@@ -151,34 +173,42 @@ class PalabraAdapter(
             arrayOf(palabra.id.toString())
         )
 
+        // Actualiza la interfaz visual
         actualizarIconoFavorito(holder, palabra)
         notifyItemChanged(position)
     }
 
+    //Navega al fragmento de detalle de la palabra
+
     private fun navegarADetalle(palabra: Palabra) {
         val detalleFragment = DetallePalabraFragment().apply {
             arguments = Bundle().apply {
+                // Datos textuales formateados con capitalización
                 putString("palabra_nahuat", capitalizarPrimeraLetra(palabra.nahuat))
                 putString("palabra_significado", capitalizarPrimeraLetra(palabra.espanol))
                 putString("categoria", capitalizarPrimeraLetra(palabra.categoria))
+                // Datos de recursos
                 putString("imagen", palabra.imagen)
                 putString("audio", palabra.audio)
+                // Identificador único
                 putInt("palabra_id", palabra.id)
             }
         }
 
-        // Obtener la actividad y navegar
+        // Realiza la transacción de navegación
         (context as? FragmentActivity)?.supportFragmentManager?.beginTransaction()
             ?.replace(R.id.fragment_container, detalleFragment)
-            ?.addToBackStack(null)
+            ?.addToBackStack(null) // Permite volver atrás con el botón de retroceso
             ?.commit()
     }
 
+
     fun actualizarLista(nuevaLista: MutableList<Palabra>) {
         lista = nuevaLista
-        notifyDataSetChanged()
+        notifyDataSetChanged() // Refresca toda la vista
     }
 
+     //Libera recursos del MediaPlayer cuando el Recyclerview se destruye
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         mediaPlayer?.release()

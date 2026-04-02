@@ -74,14 +74,13 @@ class FavoritosFragment : Fragment() {
 
     private fun obtenerPalabrasFavoritas(): MutableList<Palabra> {
         val lista = mutableListOf<Palabra>()
-
-        // CAMBIADO: "diccionario" -> "palabra"
-        val cursor = db.rawQuery(
+        
+        val resultado = db.rawQuery(
             "SELECT * FROM palabra WHERE favorito = 1 ORDER BY nahuat",
             null
         )
 
-        cursor.use {
+        resultado.use {
             if (it.moveToFirst()) {
                 do {
                     val palabra = Palabra(

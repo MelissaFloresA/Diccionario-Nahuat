@@ -72,20 +72,19 @@ class BusquedaFragment : Fragment() {
             }
         })
 
-        // Configurar el hint del SearchView
-        searchView.queryHint = "Buscar palabra en náhuat o español..."
     }
 
     private fun cargarPrimerasPalabras() {
         val lista = mutableListOf<Palabra>()
 
-        // Cambiado LIMIT 10 a LIMIT 5
-        val cursor = db.rawQuery(
+        // solo mostrar 5 palabras
+        val resultado = db.rawQuery(
             "SELECT * FROM palabra ORDER BY id LIMIT 5",
             null
         )
 
-        cursor.use {
+        //Objeto con los resultados de bd
+        resultado.use {
             if (it.moveToFirst()) {
                 do {
                     val palabra = Palabra(
@@ -127,6 +126,7 @@ class BusquedaFragment : Fragment() {
 
         val lista = mutableListOf<Palabra>()
 
+        //Busqueda por nahuat o por español
         val cursor = db.rawQuery(
             "SELECT * FROM palabra WHERE nahuat LIKE ? OR espanol LIKE ? ORDER BY nahuat",
             arrayOf("%$busqueda%", "%$busqueda%")
