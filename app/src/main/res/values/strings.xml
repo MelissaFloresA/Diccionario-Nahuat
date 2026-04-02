@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">diccionario</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="progreso_categoria">Has aprendido %1$d de %2$d palabras</string>
+    <string name="favoritos_vacio">No tienes palabras favoritas aún.\n¡Agrega algunas desde la búsqueda o categorías!</string>
+    <string name="conteo_palabras">%1$d palabras</string>
+    <string name="busqueda_primeras_palabras">Mostrando las primeras %1$d palabras</string>
+    <string name="busqueda_sin_palabras">No hay palabras disponibles</string>
+    <string name="busqueda_sin_resultados">No se encontraron resultados para \"%1$s\"</string>
+    <string name="busqueda_resultados_encontrados">Se encontraron %1$d resultados para \"%2$s\"</string>
 </resources>

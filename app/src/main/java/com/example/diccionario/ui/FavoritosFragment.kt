@@ -32,19 +32,21 @@ class FavoritosFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inicializar base de datos
         val helper = DBHelper(requireContext())
         db = helper.abrirBase()
 
-        // Configurar UI
-        val botonBack = view.findViewById<ImageButton>(R.id.boton_retroceder)
         textoVacio = view.findViewById(R.id.texto_vacio)
 
+        val botonBack = view.findViewById<ImageButton>(R.id.boton_retroceder)
         botonBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            if (parentFragmentManager.backStackEntryCount > 0) {
+                parentFragmentManager.popBackStack()
+            } else {
+                val bottomNav = requireActivity().findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottom_navigation)
+                bottomNav.selectedItemId = R.id.nav_home
+            }
         }
 
-        // Configurar RecyclerView
         recyclerView = view.findViewById(R.id.recycler_favoritos)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -57,7 +59,7 @@ class FavoritosFragment : Fragment() {
         if (lista.isEmpty()) {
             recyclerView.visibility = View.GONE
             textoVacio.visibility = View.VISIBLE
-            textoVacio.text = "No tienes palabras favoritas aún.\n¡Agrega algunas desde la búsqueda o categorías!"
+            textoVacio.text = getString(R.string.favoritos_vacio) //usamos string.xml
         } else {
             recyclerView.visibility = View.VISIBLE
             textoVacio.visibility = View.GONE
@@ -66,7 +68,7 @@ class FavoritosFragment : Fragment() {
                 lista,
                 requireContext(),
                 db,
-                true // Mostrar corazón para poder quitar de favoritos
+                true
             )
             recyclerView.adapter = adapter
         }
@@ -74,7 +76,7 @@ class FavoritosFragment : Fragment() {
 
     private fun obtenerPalabrasFavoritas(): MutableList<Palabra> {
         val lista = mutableListOf<Palabra>()
-        
+
         val resultado = db.rawQuery(
             "SELECT * FROM palabra WHERE favorito = 1 ORDER BY nahuat",
             null
@@ -103,7 +105,6 @@ class FavoritosFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        // Recargar favoritos cuando se vuelve al fragment
         if (::db.isInitialized && db.isOpen) {
             cargarFavoritos()
         }

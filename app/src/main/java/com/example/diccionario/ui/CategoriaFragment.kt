@@ -60,6 +60,7 @@ class CategoriaFragment : Fragment() {
         actualizarProgreso()
     }
 
+    //Muestra palabras
     private fun cargarPalabras() {
         val lista = obtenerPalabrasPorCategoria()
 
@@ -73,6 +74,7 @@ class CategoriaFragment : Fragment() {
         recyclerView.adapter = adapter
     }
 
+    //Consulta SQL para obtener palabras por categoría
     private fun obtenerPalabrasPorCategoria(): MutableList<Palabra> {
         val lista = mutableListOf<Palabra>()
 
@@ -102,7 +104,7 @@ class CategoriaFragment : Fragment() {
         return lista
     }
 
-    // NUEVO: calcular progreso
+    // Actualiza texto de progreso para calcular progreso
     private fun actualizarProgreso() {
         val totalCursor = db.rawQuery(
             "SELECT COUNT(*) FROM palabra WHERE categoria = ?",
@@ -128,7 +130,8 @@ class CategoriaFragment : Fragment() {
         totalCursor.close()
         aprendidasCursor.close()
 
-        textoProgreso.text = "Has aprendido $aprendidas de $total palabras"
+        // usamos string.xml para acceder a texto
+        textoProgreso.text = getString(R.string.progreso_categoria, aprendidas, total)
     }
 
     override fun onResume() {

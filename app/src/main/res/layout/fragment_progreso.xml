@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cargando..."
-                android:textSize="42sp"
+                android:textSize="38sp"
                 android:textColor="@color/main_text"
                 android:fontFamily="@font/montserrat_semibold"
                 android:layout_marginTop="32dp"

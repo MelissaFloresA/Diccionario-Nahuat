@@ -1,5 +1,6 @@
 package com.example.diccionario.ui
 
+import android.annotation.SuppressLint
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.example.diccionario.R
 import com.example.diccionario.db.DBHelper
@@ -54,15 +56,9 @@ class InicioFragment : Fragment() {
         }
     }
 
-    // Obtiene y muestra el conteo de palabras por cada categoría
     private fun cargarConteosCategorias(view: View) {
         val categorias = listOf(
-            "Familia",
-            "Vestimenta",
-            "Escuela",
-            "Personas",
-            "Alimentos",
-            "Animales"
+            "Familia", "Vestimenta", "Escuela", "Personas", "Alimentos", "Animales"
         )
 
         categorias.forEach { categoria ->
@@ -79,117 +75,97 @@ class InicioFragment : Fragment() {
             }
 
             idTexto?.let {
-                view.findViewById<TextView>(it).text = "$conteo palabras"
+                view.findViewById<TextView>(it).text = getString(R.string.conteo_palabras, conteo)
             }
         }
     }
 
-    // consulta para contar registros por categoría
     private fun obtenerConteo(categoria: String): Int {
         var total = 0
-
         val resultado = db.rawQuery(
             "SELECT COUNT(*) FROM palabra WHERE categoria = ?",
             arrayOf(categoria)
         )
-
         resultado.use {
             if (it.moveToFirst()) {
                 total = it.getInt(0)
             }
         }
-
         return total
     }
 
-    // Carga la palabra del día en la interfaz
     private fun cargarPalabraDelDia(view: View) {
         val palabra = obtenerPalabraDelDia()
-
         palabra?.let {
             palabraDelDiaId = it.id
-
-            view.findViewById<TextView>(R.id.texto_palabra_nahuat).text =
-                capitalizar(it.nahuat)
-
-            view.findViewById<TextView>(R.id.texto_significado_palabra).text =
-                capitalizar(it.espanol)
+            view.findViewById<TextView>(R.id.texto_palabra_nahuat).text = capitalizar(it.nahuat)
+            view.findViewById<TextView>(R.id.texto_significado_palabra).text = capitalizar(it.espanol)
         }
     }
 
-    // Devuelve la misma palabra durante el día o genera una nueva si cambia la fecha
+    // Obtiene la palabra aleatoria del día que cambia cada 24 horas
     private fun obtenerPalabraDelDia(): Palabra? {
-
+        // Obtener preferencias guardadas del usuario
         val prefs = requireContext().getSharedPreferences("palabra_dia", 0)
 
+        // Leer fecha y ID de la palabra guardada anteriormente
         val fechaGuardada = prefs.getString("fecha", "")
         val idGuardado = prefs.getInt("id", -1)
 
-        val fechaActual = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
-            .format(Date())
+        // Obtener fecha actual formateada (ej: 20250402)
+        val fechaActual = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
 
         var palabra: Palabra? = null
 
+        // Verificar si ya existe una palabra para hoy (misma fecha y ID válido)
         if (fechaActual == fechaGuardada && idGuardado != -1) {
-
+            // Si ya hay palabra para hoy, recuperarla de la base de datos por su ID
             val resultado = db.rawQuery(
                 "SELECT * FROM palabra WHERE id = ?",
                 arrayOf(idGuardado.toString())
             )
-
             resultado.use {
                 if (it.moveToFirst()) {
                     palabra = mapearPalabra(it)
                 }
             }
-
         } else {
-
+            // Si es un nuevo día o es la primera vez, buscar una palabra aleatoria
             val resultado = db.rawQuery(
                 "SELECT * FROM palabra ORDER BY RANDOM() LIMIT 1",
                 null
             )
-
             resultado.use {
                 if (it.moveToFirst()) {
-                    palabra = mapearPalabra(it)
-
-                    prefs.edit()
-                        .putString("fecha", fechaActual)
-                        .putInt("id", palabra!!.id)
-                        .apply()
+                    val p = mapearPalabra(it)
+                    palabra = p
+                    // Guardar la nueva palabra y fecha actual en preferencias
+                    prefs.edit {
+                        putString("fecha", fechaActual)
+                        putInt("id", p.id)
+                    }
                 }
             }
         }
-
         return palabra
     }
 
-    // Obtiene el nombre del audio que se reproducirá
     private fun obtenerNombreAudio() {
         if (palabraDelDiaId == -1) return
-
         val resultado = db.rawQuery(
             "SELECT audio FROM palabra WHERE id = ?",
             arrayOf(palabraDelDiaId.toString())
         )
-
         resultado.use {
             if (it.moveToFirst()) {
-                val audio = it.getString(0)
-                reproducirAudio(audio)
+                reproducirAudio(it.getString(0))
             }
         }
     }
 
-    // Reproduce un archivo de audio desde la carpeta raw
+    @SuppressLint("DiscouragedApi") //metodo admitido para este tipo de solución al proyecto
     private fun reproducirAudio(nombre: String) {
-        val idAudio = resources.getIdentifier(
-            nombre,
-            "raw",
-            requireContext().packageName
-        )
-
+        val idAudio = resources.getIdentifier(nombre, "raw", requireContext().packageName)
         if (idAudio != 0) {
             val mp = android.media.MediaPlayer.create(requireContext(), idAudio)
             mp.start()
@@ -197,18 +173,14 @@ class InicioFragment : Fragment() {
         }
     }
 
-    // Navega al fragment de detalle con la palabra seleccionada
     private fun navegarADetallePalabra() {
         val resultado = db.rawQuery(
             "SELECT * FROM palabra WHERE id = ?",
             arrayOf(palabraDelDiaId.toString())
         )
-
         resultado.use {
             if (it.moveToFirst()) {
-
                 val palabra = mapearPalabra(it)
-
                 val fragment = DetallePalabraFragment().apply {
                     arguments = Bundle().apply {
                         putString("palabra_nahuat", capitalizar(palabra.nahuat))
@@ -219,7 +191,6 @@ class InicioFragment : Fragment() {
                         putInt("palabra_id", palabra.id)
                     }
                 }
-
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, fragment)
                     .addToBackStack(null)
@@ -228,7 +199,6 @@ class InicioFragment : Fragment() {
         }
     }
 
-    // Convierte en un objeto Palabra
     private fun mapearPalabra(resultado: android.database.Cursor): Palabra {
         return Palabra(
             id = resultado.getInt(0),
@@ -242,24 +212,17 @@ class InicioFragment : Fragment() {
         )
     }
 
-    // Capitaliza la primera letra de un texto
     private fun capitalizar(texto: String): String {
         return texto.replaceFirstChar {
-            if (it.isLowerCase()) it.titlecase(Locale.getDefault())
-            else it.toString()
+            if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
         }
     }
 
-    // Configura el clic de cada categoría y navega al fragment correspondiente
     private fun configurarCategoriaClick(view: View, cardId: Int, categoria: String) {
         view.findViewById<CardView>(cardId).setOnClickListener {
-
             val fragment = CategoriaFragment().apply {
-                arguments = Bundle().apply {
-                    putString("categoria", categoria)
-                }
+                arguments = Bundle().apply { putString("categoria", categoria) }
             }
-
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
@@ -269,8 +232,6 @@ class InicioFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (::db.isInitialized && db.isOpen) {
-            db.close()
-        }
+        if (::db.isInitialized && db.isOpen) db.close()
     }
 }

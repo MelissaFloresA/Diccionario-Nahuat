@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:text="Progreso"
                     android:textAllCaps="true"
-                    android:textSize="10sp"
+                    android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold"
                     android:textColor="@color/boton" />
 
