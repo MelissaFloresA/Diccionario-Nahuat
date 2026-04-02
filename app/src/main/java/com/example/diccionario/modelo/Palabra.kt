@@ -7,5 +7,6 @@ data class Palabra(
     val categoria: String,
     val imagen: String,
     val audio: String,
-    var favorito: Int
+    var favorito: Int,
+    var aprendida: Int
 )

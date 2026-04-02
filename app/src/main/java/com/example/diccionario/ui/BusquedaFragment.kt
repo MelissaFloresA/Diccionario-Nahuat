@@ -94,7 +94,8 @@ class BusquedaFragment : Fragment() {
                         categoria = it.getString(3),
                         imagen = it.getString(4),
                         audio = it.getString(5),
-                        favorito = it.getInt(6)
+                        favorito = it.getInt(6),
+                        aprendida = it.getInt(7)
                     )
                     lista.add(palabra)
                 } while (it.moveToNext())
@@ -142,7 +143,8 @@ class BusquedaFragment : Fragment() {
                         categoria = it.getString(3),
                         imagen = it.getString(4),
                         audio = it.getString(5),
-                        favorito = it.getInt(6)
+                        favorito = it.getInt(6),
+                        aprendida = it.getInt(7)
                     )
                     lista.add(palabra)
                 } while (it.moveToNext())

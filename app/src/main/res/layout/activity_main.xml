@@ -19,10 +19,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@android:color/white"
+        android:paddingVertical="4dp"
         app:menu="@menu/botton_menu"
         app:itemIconTint="@color/bottom_nav_colors"
         app:itemTextColor="@color/bottom_nav_colors"
         app:itemRippleColor="@android:color/transparent"
-        app:itemActiveIndicatorStyle="@null"/>
+        app:itemActiveIndicatorStyle="@null"
+        app:labelVisibilityMode="labeled" />
 
 </RelativeLayout>

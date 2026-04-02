@@ -53,6 +53,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 throw RuntimeException("Error al copiar la base de datos", e)
             }
         }
-        return this.readableDatabase
+        return this.writableDatabase
     }
 }

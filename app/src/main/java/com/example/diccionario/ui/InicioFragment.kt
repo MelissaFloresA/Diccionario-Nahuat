@@ -237,7 +237,8 @@ class InicioFragment : Fragment() {
             categoria = resultado.getString(3),
             imagen = resultado.getString(4),
             audio = resultado.getString(5),
-            favorito = resultado.getInt(6)
+            favorito = resultado.getInt(6),
+            aprendida = resultado.getInt(7)
         )
     }
 

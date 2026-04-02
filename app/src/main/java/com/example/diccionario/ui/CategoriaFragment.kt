@@ -20,6 +20,7 @@ class CategoriaFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PalabraAdapter
     private lateinit var db: SQLiteDatabase
+    private lateinit var textoProgreso: TextView
     private var categoria: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,13 +40,12 @@ class CategoriaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inicializar base de datos
         val helper = DBHelper(requireContext())
         db = helper.abrirBase()
 
-        // Configurar UI
         val titulo = view.findViewById<TextView>(R.id.texto_titulo_categoria)
         val botonBack = view.findViewById<ImageButton>(R.id.boton_retroceder)
+        textoProgreso = view.findViewById(R.id.texto_progreso)
 
         titulo.text = categoria
 
@@ -53,11 +53,11 @@ class CategoriaFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-        // Configurar RecyclerView
         recyclerView = view.findViewById(R.id.recycler_palabras)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         cargarPalabras()
+        actualizarProgreso()
     }
 
     private fun cargarPalabras() {
@@ -67,7 +67,7 @@ class CategoriaFragment : Fragment() {
             lista,
             requireContext(),
             db,
-            false // No mostrar corazón en categoría
+            false
         )
 
         recyclerView.adapter = adapter
@@ -76,7 +76,6 @@ class CategoriaFragment : Fragment() {
     private fun obtenerPalabrasPorCategoria(): MutableList<Palabra> {
         val lista = mutableListOf<Palabra>()
 
-        // consulta sql
         val resultado = db.rawQuery(
             "SELECT * FROM palabra WHERE categoria = ? ORDER BY nahuat",
             arrayOf(categoria)
@@ -86,13 +85,14 @@ class CategoriaFragment : Fragment() {
             if (it.moveToFirst()) {
                 do {
                     val palabra = Palabra(
-                        id = it.getInt(0),
-                        espanol = it.getString(1),
-                        nahuat = it.getString(2),
-                        categoria = it.getString(3),
-                        imagen = it.getString(4),
-                        audio = it.getString(5),
-                        favorito = it.getInt(6)
+                        it.getInt(0),
+                        it.getString(1),
+                        it.getString(2),
+                        it.getString(3),
+                        it.getString(4),
+                        it.getString(5),
+                        it.getInt(6),
+                        it.getInt(7)
                     )
                     lista.add(palabra)
                 } while (it.moveToNext())
@@ -100,6 +100,43 @@ class CategoriaFragment : Fragment() {
         }
 
         return lista
+    }
+
+    // NUEVO: calcular progreso
+    private fun actualizarProgreso() {
+        val totalCursor = db.rawQuery(
+            "SELECT COUNT(*) FROM palabra WHERE categoria = ?",
+            arrayOf(categoria)
+        )
+
+        val aprendidasCursor = db.rawQuery(
+            "SELECT COUNT(*) FROM palabra WHERE categoria = ? AND aprendida = 1",
+            arrayOf(categoria)
+        )
+
+        var total = 0
+        var aprendidas = 0
+
+        if (totalCursor.moveToFirst()) {
+            total = totalCursor.getInt(0)
+        }
+
+        if (aprendidasCursor.moveToFirst()) {
+            aprendidas = aprendidasCursor.getInt(0)
+        }
+
+        totalCursor.close()
+        aprendidasCursor.close()
+
+        textoProgreso.text = "Has aprendido $aprendidas de $total palabras"
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (::db.isInitialized && db.isOpen) {
+            actualizarProgreso()
+            cargarPalabras() // refresca lista por si cambió estado
+        }
     }
 
     override fun onDestroy() {
