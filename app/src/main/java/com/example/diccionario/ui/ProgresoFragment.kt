@@ -32,6 +32,9 @@ class ProgresoFragment : Fragment(R.layout.fragment_progreso) {
     private var palabraActual: Palabra? = null
     private var estaCargando = false
 
+    private lateinit var barraProgreso: android.widget.ProgressBar
+    private lateinit var textoPorcentaje: TextView
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -77,6 +80,11 @@ class ProgresoFragment : Fragment(R.layout.fragment_progreso) {
                 }
             }
         }
+
+        barraProgreso = view.findViewById(R.id.barraProgreso)
+        textoPorcentaje = view.findViewById(R.id.textoPorcentaje)
+
+        actualizarProgreso()
     }
 
     // Obtiene lista de palabras priorizando no aprendidas
@@ -137,11 +145,22 @@ class ProgresoFragment : Fragment(R.layout.fragment_progreso) {
 
         if (respuesta == correcta) {
             aplicarBorde(card, R.color.verde)
+
             if (palabraActual?.aprendida == 0) {
                 val values = ContentValues().apply { put("aprendida", 1) }
                 db.update("palabra", values, "id = ?", arrayOf(palabraActual?.id.toString()))
             }
-            mostrarToastVerdeRapido("+1 ${palabraActual?.nahuat} aprendida")
+
+            actualizarProgreso()
+
+            val porcentaje = calcularProgreso()
+
+            if (porcentaje == 100) {
+                mostrarToastVerdeRapido("${palabraActual?.nahuat} reforzada")
+            } else {
+                mostrarToastVerdeRapido("+1 ${palabraActual?.nahuat} aprendida")
+            }
+
         } else {
             aplicarBorde(card, R.color.rojo)
         }
@@ -152,6 +171,45 @@ class ProgresoFragment : Fragment(R.layout.fragment_progreso) {
                 estaCargando = false
             }
         }, 250)
+    }
+    //FUNCION PARA CALCULAR PORCENTAJE DE APRENDIZAJE
+    private fun calcularProgreso(): Int {
+        val total = db.rawQuery("SELECT COUNT(*) FROM palabra", null)
+        val aprendidas = db.rawQuery("SELECT COUNT(*) FROM palabra WHERE aprendida = 1", null)
+
+        var totalCount = 0
+        var aprendidasCount = 0
+
+        if (total.moveToFirst()) totalCount = total.getInt(0)
+        if (aprendidas.moveToFirst()) aprendidasCount = aprendidas.getInt(0)
+
+        total.close()
+        aprendidas.close()
+
+        return if (totalCount > 0) {
+            ((aprendidasCount * 100.0) / totalCount).toInt()
+        } else 0
+    }
+
+    //Actualiza barra de progreso
+    private fun actualizarProgreso() {
+        val porcentaje = calcularProgreso()
+
+        val anim = android.animation.ObjectAnimator.ofInt(
+            barraProgreso,
+            "progress",
+            barraProgreso.progress,
+            porcentaje
+        )
+        anim.duration = 500
+        anim.interpolator = android.view.animation.DecelerateInterpolator()
+        anim.start()
+
+        textoPorcentaje.text = "$porcentaje% aprendido"
+
+        if (porcentaje == 100) {
+            textoPorcentaje.text = "$porcentaje% aprendido ¡felicidades!"
+        }
     }
 
     // Aplica borde de color a la card
