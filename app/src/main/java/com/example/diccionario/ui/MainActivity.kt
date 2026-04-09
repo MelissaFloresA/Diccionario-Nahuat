@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home -> replaceFragment(InicioFragment())
                 R.id.nav_search -> replaceFragment(BusquedaFragment())
                 R.id.nav_favorites -> replaceFragment(FavoritosFragment())
+                R.id.nav_progreso -> replaceFragment(ProgresoFragment())
                 else -> false
             }
             true

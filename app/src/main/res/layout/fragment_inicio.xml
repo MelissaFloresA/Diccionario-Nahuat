@@ -92,7 +92,7 @@
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Siwat"
                         android:textColor="@color/white"
-                        android:textSize="32sp" />
+                        android:textSize="28sp" />
 
                     <TextView
                         android:id="@+id/texto_significado_palabra"

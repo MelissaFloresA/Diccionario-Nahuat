@@ -1,5 +1,6 @@
 package com.example.diccionario.ui
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.media.MediaPlayer
@@ -15,6 +16,7 @@ import com.example.diccionario.R
 import com.example.diccionario.db.DBHelper
 import com.google.android.material.button.MaterialButton
 
+@SuppressLint("DiscouragedApi")
 class DetallePalabraFragment : Fragment() {
 
     private var palabraId: Int = -1

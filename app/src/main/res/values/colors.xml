@@ -12,7 +12,12 @@
     <color name="text_secundario">#868889</color> <!-- Texto secundario gris -->
     <color name="text_card_dia">#A9C6F9</color>
 
+    <!-- Iconos de boton favorito -->
     <color name="favorito_activo">#EF4444</color>
     <color name="favorito_fondo">#FEF2F2</color>
     <color name="favorito_borde">#D1D5DB</color>
+
+    <!-- Juego para medir progreso -->
+    <color name="verde">#4CAF50</color>
+    <color name="rojo">#F44336</color>
 </resources>

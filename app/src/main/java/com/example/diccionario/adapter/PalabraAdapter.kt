@@ -32,7 +32,7 @@ class PalabraAdapter(
 
     private var mediaPlayer: MediaPlayer? = null
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val cardView: View = view // Referencia a toda la card para el click listener
         val img: ImageView = view.findViewById(R.id.imgPalabra)
         val txtNahuat: TextView = view.findViewById(R.id.txtNahuat)
@@ -61,8 +61,8 @@ class PalabraAdapter(
         holder.txtNahuat.text = capitalizarPrimeraLetra(palabra.nahuat)
         holder.txtEspanol.text = capitalizarPrimeraLetra(palabra.espanol)
 
-        // Carga la imagen desde recursos drawable
-        cargarImagen(holder.img, palabra.imagen)
+        // Carga la imagen desde recursos drawable usando el nombre en náhuat
+        cargarImagen(holder.img, palabra.nahuat)
 
         // Configuramos el botón de audio para reproducir audio
         holder.btnAudio.setOnClickListener {
@@ -92,15 +92,19 @@ class PalabraAdapter(
         }
     }
 
-  //Funcion de capitalización
+    //Funcion de capitalización
     private fun capitalizarPrimeraLetra(texto: String): String {
         if (texto.isEmpty()) return texto
-        return texto.substring(0, 1).uppercase() + texto.substring(1).lowercase()
+        return texto[0].uppercase() + texto.substring(1).lowercase()
     }
 
-    //Funcion para cargar png
-    private fun cargarImagen(imageView: ImageView, nombreImagen: String) {
-        // Obtiene el ID del recurso drawable por su nombre
+    //Funcion para cargar png (formato img_nombre_nahuat)
+    @Suppress("DiscouragedApi")
+    private fun cargarImagen(imageView: ImageView, nombreNahuat: String) {
+        // Construir el nombre de la imagen: img_nahuat
+        val nombreImagen = "img_${nombreNahuat.lowercase()}"
+
+        // Obtener el ID del recurso drawable por su nombre
         val idImagen = context.resources.getIdentifier(
             nombreImagen,
             "drawable",
@@ -116,7 +120,7 @@ class PalabraAdapter(
     }
 
     //Función para reproducir audio desde la carpeta raw
-
+    @Suppress("DiscouragedApi")
     private fun reproducirAudio(nombreAudio: String) {
         try {
             mediaPlayer?.release()
@@ -143,7 +147,7 @@ class PalabraAdapter(
         }
     }
 
-  //Actulización de vista de favoritos segun db
+    //Actulización de vista de favoritos segun db
     private fun actualizarIconoFavorito(holder: ViewHolder, palabra: Palabra) {
         if (palabra.favorito == 1) {
             holder.btnFav.setImageResource(R.drawable.ic_favorite_filled)
@@ -187,11 +191,13 @@ class PalabraAdapter(
                 putString("palabra_nahuat", capitalizarPrimeraLetra(palabra.nahuat))
                 putString("palabra_significado", capitalizarPrimeraLetra(palabra.espanol))
                 putString("categoria", capitalizarPrimeraLetra(palabra.categoria))
-                // Datos de recursos
-                putString("imagen", palabra.imagen)
+                // Datos de recursos (imagen con formato img_nahuat)
+                putString("imagen", "img_${palabra.nahuat.lowercase()}")
                 putString("audio", palabra.audio)
                 // Identificador único
                 putInt("palabra_id", palabra.id)
+                // Estado de aprendizaje
+                putInt("aprendida", palabra.aprendida)
             }
         }
 
@@ -202,13 +208,7 @@ class PalabraAdapter(
             ?.commit()
     }
 
-
-    fun actualizarLista(nuevaLista: MutableList<Palabra>) {
-        lista = nuevaLista
-        notifyDataSetChanged() // Refresca toda la vista
-    }
-
-     //Libera recursos del MediaPlayer cuando el Recyclerview se destruye
+    //Libera recursos del MediaPlayer cuando el Recyclerview se destruye
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         mediaPlayer?.release()
