@@ -124,7 +124,16 @@ class ProgresoFragment : Fragment(R.layout.fragment_progreso) {
         val pool = listaJuego.shuffled()
         for (palabra in pool) {
             if (opcionesUnicas.size == 4) break
-            if (opcionesUnicas.none { it.espanol == palabra.espanol }) {
+
+            // Un distractor es válido si:
+            // 1. No tiene el mismo texto en español que las opciones ya agregadas
+            // 2. No es un sinónimo de la palabra actual (mismo nahuat)
+            // 3. No es un sinónimo de los otros distractores (para variedad)
+            val yaAgregada = opcionesUnicas.any { it.espanol == palabra.espanol }
+            val esSinonimoDeActual = palabra.nahuat == palabraActual?.nahuat
+            val esSinonimoDeOtras = opcionesUnicas.any { it.nahuat == palabra.nahuat }
+
+            if (!yaAgregada && !esSinonimoDeActual && !esSinonimoDeOtras) {
                 opcionesUnicas.add(palabra)
             }
         }
@@ -141,15 +150,25 @@ class ProgresoFragment : Fragment(R.layout.fragment_progreso) {
     // Verifica respuesta y marca como aprendida si es correcta
     private fun verificarRespuesta(respuesta: String, card: CardView) {
         estaCargando = true
-        val correcta = palabraActual?.espanol
 
-        if (respuesta == correcta) {
+        // Buscamos si la respuesta seleccionada es una traducción válida para la palabra en nahuat
+        val cursor = db.rawQuery(
+            "SELECT COUNT(*) FROM palabra WHERE nahuat = ? AND espanol = ?",
+            arrayOf(palabraActual?.nahuat, respuesta)
+        )
+
+        var esCorrecta = false
+        if (cursor.moveToFirst()) {
+            esCorrecta = cursor.getInt(0) > 0
+        }
+        cursor.close()
+
+        if (esCorrecta) {
             aplicarBorde(card, R.color.verde)
 
-            if (palabraActual?.aprendida == 0) {
-                val values = ContentValues().apply { put("aprendida", 1) }
-                db.update("palabra", values, "id = ?", arrayOf(palabraActual?.id.toString()))
-            }
+            // Marcamos todas las acepciones de esta palabra como aprendidas
+            val values = ContentValues().apply { put("aprendida", 1) }
+            db.update("palabra", values, "nahuat = ?", arrayOf(palabraActual?.nahuat))
 
             actualizarProgreso()
 
