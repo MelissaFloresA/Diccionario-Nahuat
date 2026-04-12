@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">diccionario</string>
+    <string name="app_name">Diccionario</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="progreso_categoria">Has aprendido %1$d de %2$d palabras</string>
     <string name="favoritos_vacio">No tienes palabras favoritas aún.\n¡Agrega algunas desde la búsqueda o categorías!</string>

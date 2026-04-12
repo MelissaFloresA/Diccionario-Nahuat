@@ -192,6 +192,12 @@ class InicioFragment : Fragment() {
                     }
                 }
                 requireActivity().supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(
+                        R.anim.slide_in,
+                        R.anim.slide_out,
+                        R.anim.pop_in,
+                        R.anim.pop_out
+                    )
                     .replace(R.id.fragment_container, fragment)
                     .addToBackStack(null)
                     .commit()
@@ -224,6 +230,12 @@ class InicioFragment : Fragment() {
                 arguments = Bundle().apply { putString("categoria", categoria) }
             }
             requireActivity().supportFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in,
+                    R.anim.slide_out,
+                    R.anim.pop_in,
+                    R.anim.pop_out
+                )
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()

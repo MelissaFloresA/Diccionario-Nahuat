@@ -203,6 +203,12 @@ class PalabraAdapter(
 
         // Realiza la transacción de navegación
         (context as? FragmentActivity)?.supportFragmentManager?.beginTransaction()
+            ?.setCustomAnimations(
+                R.anim.slide_in,
+                R.anim.slide_out,
+                R.anim.pop_in,
+                R.anim.pop_out
+            )
             ?.replace(R.id.fragment_container, detalleFragment)
             ?.addToBackStack(null) // Permite volver atrás con el botón de retroceso
             ?.commit()
