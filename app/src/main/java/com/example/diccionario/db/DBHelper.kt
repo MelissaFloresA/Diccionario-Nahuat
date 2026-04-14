@@ -11,48 +11,64 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     companion object {
         private const val DATABASE_NAME = "diccionario_nahuat.db"
         private const val DATABASE_VERSION = 1
+        private const val MIS_PREFERENCIAS = "mis_preferencias"
+        private const val BD_COPIADA = "bd_copiada"
     }
 
     private val appContext = context.applicationContext
+    private val preferencias = appContext.getSharedPreferences(MIS_PREFERENCIAS, Context.MODE_PRIVATE)
 
     override fun onCreate(db: SQLiteDatabase) {
-        // No hace nada - la base de datos se copia desde assets
+        // No necesito hacer nada aquí porque la BD ya viene lista desde assets
     }
 
-    //Se ejecuta cuando se cambia de version (para este proyecto solo manejaremos una)
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // Para futuras actualizaciones
-        if (oldVersion < newVersion) {
-        }
+        // Por ahora no necesito actualizar la BD
     }
 
-    //Copia la base de datos prehecha hacia el sistema del teléfono
+    // Esta función se encarga de copiar la BD desde la carpeta assets al teléfono
     @Throws(IOException::class)
     private fun copiarBaseDatos() {
-        val dbPath = appContext.getDatabasePath(DATABASE_NAME)
+        val rutaBD = appContext.getDatabasePath(DATABASE_NAME)
 
-        // Crear directorio si no existe
-        dbPath.parentFile?.mkdirs()
+        // Crear la carpeta si no existe
+        rutaBD.parentFile?.mkdirs()
 
-        // Copiar desde assets
-        appContext.assets.open(DATABASE_NAME).use { input ->
-            FileOutputStream(dbPath).use { output ->
-                input.copyTo(output)
+        // Copiar el archivo
+        appContext.assets.open(DATABASE_NAME).use { entrada ->
+            FileOutputStream(rutaBD).use { salida ->
+                entrada.copyTo(salida)
             }
         }
     }
 
+    // Función principal para abrir la base de datos
     fun abrirBase(): SQLiteDatabase {
-        // Verificar si la base de datos existe y copiarla si es necesario
-        val dbPath = appContext.getDatabasePath(DATABASE_NAME)
-        if (!dbPath.exists()) {
+        val rutaBD = appContext.getDatabasePath(DATABASE_NAME)
+
+        // Verificar si ya copiamos la BD antes
+        val yaCopiada = preferencias.getBoolean(BD_COPIADA, false)
+
+        // Solo copio la BD si es la primera vez que se instala la app o si no existe
+        if (!yaCopiada || !rutaBD.exists()) {
             try {
+                // Si la BD existe pero es primera instalación, la borro para copiar una nueva
+                if (rutaBD.exists() && !yaCopiada) {
+                    rutaBD.delete()
+                }
+
                 copiarBaseDatos()
+
+                // Guardo en preferencias que ya copié la BD
+                preferencias.edit().putBoolean(BD_COPIADA, true).apply()
+
             } catch (e: Exception) {
                 e.printStackTrace()
                 throw RuntimeException("Error al copiar la base de datos", e)
             }
         }
+
+        // Devuelvo la BD lista para usar
         return this.writableDatabase
     }
 }
