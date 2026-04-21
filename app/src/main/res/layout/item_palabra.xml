@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="12dp"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="16dp"
@@ -23,7 +24,8 @@
             android:scaleType="centerCrop"
             android:layout_marginEnd="12dp"
             android:src="@drawable/ic_launcher_background"
-            android:contentDescription="Imagen de la palabra" />
+            android:contentDescription="Imagen de la palabra"
+            tools:ignore="HardcodedText,TextContrastCheck"/>
 
         <!-- TEXTOS - Ocupa todo el espacio disponible -->
         <LinearLayout
@@ -41,7 +43,8 @@
                 android:textColor="@color/main_text"
                 android:textSize="18sp"
                 android:maxLines="1"
-                android:ellipsize="end" />
+                android:ellipsize="end"
+                tools:ignore="HardcodedText"/>
 
             <TextView
                 android:id="@+id/txtEspanol"
@@ -53,7 +56,8 @@
                 android:textColor="@color/text_secundario"
                 android:textSize="14sp"
                 android:maxLines="1"
-                android:ellipsize="end" />
+                android:ellipsize="end"
+                tools:ignore="HardcodedText,TextContrastCheck"/>
 
         </LinearLayout>
 
@@ -82,7 +86,8 @@
                 app:iconGravity="textStart"
                 app:iconSize="24dp"
                 app:iconTint="@color/white"
-                app:cornerRadius="24dp" />
+                app:cornerRadius="24dp"
+                tools:ignore="HardcodedText"/>
 
             <!-- FAVORITO - ImageButton con área táctil de 40dp pero visual de 32dp -->
             <ImageButton
@@ -95,7 +100,8 @@
                 android:src="@drawable/ic_favorite_border"
                 android:visibility="gone"
                 android:contentDescription="Agregar a favoritos"
-                app:tint="@color/text_secundario" />
+                app:tint="@color/text_secundario"
+                tools:ignore="HardcodedText"/>
 
         </LinearLayout>
 
