@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
-        android:title="Inicio"/>
+        android:title="Inicio"
+        tools:ignore="HardcodedText"/>
 
     <item
         android:id="@+id/nav_search"
         android:icon="@drawable/ic_search"
-        android:title="Búsqueda"/>
+        android:title="Búsqueda"
+        tools:ignore="HardcodedText"/>
 
     <item
         android:id="@+id/nav_favorites"
         android:icon="@drawable/ic_favorite"
-        android:title="Favoritos"/>
+        android:title="Favoritos"
+        tools:ignore="HardcodedText"/>
 
     <item
         android:id="@+id/nav_progreso"
         android:icon="@drawable/ic_progreso"
-        android:title="Progreso" />
+        android:title="Progreso"
+        tools:ignore="HardcodedText"/>
 
 </menu>

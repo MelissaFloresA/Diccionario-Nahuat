@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/background_2">
 
     <!-- Header -->
@@ -25,7 +26,10 @@
             app:tint="@color/main_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="Botónretroceder"
+            tools:ignore="ContentDescription,TouchTargetSizeCheck,HardcodedText"
+            />
 
         <TextView
             android:id="@+id/texto_titulo_categoria"
@@ -38,7 +42,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="HardcodedText"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -67,7 +72,9 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/check_progreso"
-                app:tint="@color/boton" />
+                app:tint="@color/boton"
+                android:contentDescription="imagen logo"
+                tools:ignore="HardcodedText"/>
 
             <!-- Textos verticales-->
             <LinearLayout
@@ -84,7 +91,8 @@
                     android:textAllCaps="true"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold"
-                    android:textColor="@color/boton" />
+                    android:textColor="@color/boton"
+                    tools:ignore="HardcodedText"/>
 
                 <TextView
                     android:id="@+id/texto_progreso"
@@ -94,7 +102,8 @@
                     android:text="Has aprendido 0 de 0 palabras"
                     android:textSize="12sp"
                     android:fontFamily="@font/montserrat_regular"
-                    android:textColor="@color/text_secundario" />
+                    android:textColor="@color/text_secundario"
+                    tools:ignore="HardcodedText,TextContrastCheck"/>
 
             </LinearLayout>
 
